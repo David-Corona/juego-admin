@@ -1,1 +1,67 @@
-<p>users-list works!</p>
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+
+            <!-- responsiveLayout="scroll"
+            [globalFilterFields]="['name','country.name','representative.name','status']"
+            [paginator]="true"
+            [rowsPerPageOptions]="[10,20,30]"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [(selection)]="selectedProducts"
+            selectionMode="multiple"
+            [rowHover]="true"
+            dataKey="id" -->
+            <p-table #dt [value]="users" [columns]="cols" [rows]="10" >
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th> -->
+                        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+                        <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+                        <th pSortableColumn="role">Rol <p-sortIcon field="role"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-user>
+                    <tr>
+                        <!-- <td>
+                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                        </td> -->
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">ID</span>
+                            {{user.id}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Nombre</span>
+                            {{user.nombre}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Email</span>
+                            {{user.email}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Rol</span>
+                            {{user.role}}
+                        </td>
+
+                        <!-- <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(product)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button>
+                            </div>
+                        </td> -->
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+
+
+
+        </div>
+</div>
