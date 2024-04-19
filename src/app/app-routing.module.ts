@@ -7,8 +7,12 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
     imports: [
         RouterModule.forRoot([
             {
-                path: '', component: AppLayoutComponent,
+                path: '',
+                component: AppLayoutComponent,
                 children: [
+                    { path: 'users', loadChildren: () => import('./components/users/users.module').then(m => m.UsersModule) },
+                    { path: 'auth', loadChildren: () => import('./components/auth/auth.module').then(m => m.AuthModule) },
+
                     { path: '', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
                     { path: 'uikit', loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
                     { path: 'utilities', loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
