@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-
 import { MessageService } from 'primeng/api';
-
+import { Table } from 'primeng/table';
 import { UsersService } from '../users.service';
 
 
-
+// TODO - Export interfaces file
 interface Column {
     field: string;
     header: string;
@@ -97,7 +96,7 @@ export class UsersListComponent {
         this.userDialog = true;
     }
 
-    editUser(user: User) {
+    openEditUser(user: User) {
         this.user = { ...user };
         this.userDialog = true;
     }
@@ -109,6 +108,15 @@ export class UsersListComponent {
 
     saveUser() {
         this.submitted = true;
+        if(this.user.id){
+            this.editUser();
+        } else {
+            this.createUser();
+        }
+        this.userDialog = false;
+    }
+
+    createUser() {
         this.usersService.createUsuario(this.user)
         .subscribe({
           next: (resp: any) => { // TODO UserResponse
@@ -122,8 +130,21 @@ export class UsersListComponent {
             this.messageService.add({ severity: 'error', summary: '¡Error!', detail: 'Error al crear usuario'});
           }
         });
-        this.userDialog = false;
-        this.user = {};
+    }
+
+    editUser() {
+        this.usersService.updateUsuario(this.user)
+        .subscribe({
+          next: (resp: any) => { // TODO UserResponse
+            console.log(resp);
+            this.users = this.users.map(u => u.id === this.user.id ? resp.data : u);
+            this.messageService.add({ severity: 'success', summary: '¡Éxito!', detail: 'Usuario editado correctamente'});
+          },
+          error: e => {
+            console.error("Error al editar usuario: ", e);
+            this.messageService.add({ severity: 'error', summary: '¡Error!', detail: 'Error al editar usuario'});
+          }
+        });
     }
 
 
@@ -170,7 +191,9 @@ export class UsersListComponent {
         });
     }
 
-
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    }
 
 
 }

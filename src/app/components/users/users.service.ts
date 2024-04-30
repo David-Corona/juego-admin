@@ -25,6 +25,10 @@ export class UsersService {
         return this.http.post<any>(API_URL_USUARIOS + '/create', usuario);
     }
 
+    updateUsuario(usuario: any): Observable<any> {
+        return this.http.patch<any>(`${API_URL_USUARIOS}/update/${usuario.id}`, usuario);
+    }
+
     deleteUsuarios(ids: number[]): Observable<any> {
         return this.http.post<any>(API_URL_USUARIOS + '/delete', ids );
     }
