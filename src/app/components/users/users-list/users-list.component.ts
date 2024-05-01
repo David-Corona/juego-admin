@@ -26,6 +26,14 @@ interface User {
     UpdatedAt?: Date;
 }
 
+interface PageEvent {
+    first: number;
+    rows: number;
+    page: number;
+    pageCount: number;
+}
+
+
 @Component({
     //   selector: 'app-users-list',
     //   standalone: true,
@@ -48,7 +56,14 @@ export class UsersListComponent {
 
     submitted: boolean = false;
 
-    // rowsPerPageOptions = [5, 10, 20];
+    loading: boolean = true;
+
+    pageSizeOptions: number[] = [1, 2, 5, 10, 20, 50];
+    currentPage: number = 1;
+    pageSize: number = 2;
+    totalRecords: number = 0;
+    first: number = 0;
+    // last: number = 1;
 
     constructor(
         private usersService: UsersService,
@@ -59,34 +74,54 @@ export class UsersListComponent {
 
 
     ngOnInit(): void {
-
         this.cols = [
             { field: 'id', header: 'ID' },
             { field: 'nombre', header: 'Nombre' },
             { field: 'email', header: 'Email' },
             { field: 'role', header: 'Rol' }
         ];
-
         this.roles = [
             { label: 'Administrador', value: 'admin' },
             { label: 'Usuario', value: 'user' },
         ];
 
         // TODO - Resolver
-        this.usersService.getUsuarios()
+        this.loadUsers();
+    }
+
+    loadUsers(){
+        this.usersService.getUsuarios({ page: this.currentPage, pageSize: this.pageSize})
         .subscribe({
           next: resp => {
-            this.users = resp.data;
-            this.messageService.add({ severity: 'success', summary: '¡Éxito!', detail: 'Usuarios cargados correctamente'});
             console.log(resp);
+            this.users = resp.data.rows;
+            this.totalRecords = resp.data.count;
+            this.loading = false;
           },
           error: e => {
             console.error("Error al listar usuarios: ", e);
-
+            this.messageService.add({ severity: 'error', summary: '¡Error!', detail: 'Error al listar usuarios'});
           }
         })
+    }
 
+    // TODO - This only triggers on pagination
+    onPageChange(event: any): void {
+        this.first = event.first;
+        this.pageSize = event.rows;
+        this.currentPage = this.first / this.pageSize + 1;
+        console.log("CurrentPage - ", this.currentPage, " | PageSize - ", this.pageSize);
+        this.loadUsers();
+    }
 
+    // TODO - This triggers on pagination, ordering and filtering
+    // loadNodes() {
+
+    // }
+
+    // TODO
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
 
@@ -189,10 +224,6 @@ export class UsersListComponent {
           },
           complete: () => {this.selectedUsers = []}
         });
-    }
-
-    onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
 

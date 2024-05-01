@@ -33,7 +33,7 @@ import { UsersListRoutingModule } from './users-list-routing.module';
     InputTextModule,
     DropdownModule,
     InputSwitchModule,
-    DialogModule
+    DialogModule,
 
   ]
 })
