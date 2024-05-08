@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { LazyLoadEvent, MessageService, PrimeNGConfig } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { UsersService } from '../users.service';
 
 
-// TODO - Export interfaces file
+// TODO - Export to an interfaces file
 interface Column {
     field: string;
     header: string;
@@ -26,13 +26,6 @@ interface User {
     UpdatedAt?: Date;
 }
 
-interface PageEvent {
-    first: number;
-    rows: number;
-    page: number;
-    pageCount: number;
-}
-
 
 @Component({
     //   selector: 'app-users-list',
@@ -50,26 +43,25 @@ export class UsersListComponent {
     cols: Column[] = [];
     roles: userRole[] = [];
 
+    submitted: boolean = false;
     userDialog: boolean = false;
     deleteUserDialog: boolean = false;
     deleteUsersDialog: boolean = false;
 
-    submitted: boolean = false;
+    loading: boolean;
 
-    loading: boolean = true;
-
-    pageSizeOptions: number[] = [1, 2, 5, 10, 20, 50];
+    pageSizeOptions: number[] = [5, 10, 25, 50];
     currentPage: number = 1;
-    pageSize: number = 2;
+    pageSize: number = 5;
     totalRecords: number = 0;
     first: number = 0;
-    // last: number = 1;
+
 
     constructor(
         private usersService: UsersService,
-        private messageService: MessageService
+        private messageService: MessageService,
         // protected router: Router,
-
+        private primengConfig: PrimeNGConfig
       ) { }
 
 
@@ -86,43 +78,55 @@ export class UsersListComponent {
         ];
 
         // TODO - Resolver
-        this.loadUsers();
+        // this.loadUsers();
+
+        this.loading = true
+        this.primengConfig.ripple = true;
     }
 
-    loadUsers(){
-        this.usersService.getUsuarios({ page: this.currentPage, pageSize: this.pageSize})
+    loadUsers(options: any){ // TODO - Type
+        this.usersService.getUsuarios(options)
         .subscribe({
           next: resp => {
             console.log(resp);
             this.users = resp.data.rows;
             this.totalRecords = resp.data.count;
-            this.loading = false;
           },
           error: e => {
             console.error("Error al listar usuarios: ", e);
             this.messageService.add({ severity: 'error', summary: '¡Error!', detail: 'Error al listar usuarios'});
-          }
+          },
+          complete: () => this.loading = false
         })
     }
 
-    // TODO - This only triggers on pagination
-    onPageChange(event: any): void {
-        this.first = event.first;
-        this.pageSize = event.rows;
-        this.currentPage = this.first / this.pageSize + 1;
-        console.log("CurrentPage - ", this.currentPage, " | PageSize - ", this.pageSize);
-        this.loadUsers();
-    }
-
-    // TODO - This triggers on pagination, ordering and filtering
-    // loadNodes() {
-
+    // clear(table: Table) {
+    //     table.clear();
     // }
 
-    // TODO
-    onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    // TODO - This triggers on pagination, ordering and filtering
+    onChange(event: LazyLoadEvent): void {
+        console.log("Event - ", event);
+        this.first = event.first;
+
+        const options = {
+            pageSize: event.rows,
+            page: this.first / this.pageSize + 1,
+            sortOrder: event.sortOrder,
+            sortField: event.sortField,
+            filters: JSON.stringify(event.filters)
+        }
+
+        this.pageSize = event.rows;
+        this.currentPage = this.first / this.pageSize + 1;
+
+        this.loadUsers(options);
     }
+
+    // TODO
+    // onGlobalFilter(table: Table, event: Event) {
+    //     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    // }
 
 
     openNewUser() {
