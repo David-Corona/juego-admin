@@ -6,27 +6,17 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewUser()"></button>
-                        <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelecteUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
+                        <button pButton label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewUser()"></button>
+                        <button pButton label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelecteUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
                     </div>
                 </ng-template>
 
                 <!-- <ng-template pTemplate="right">
-                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                    <button pButton label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="usersTable.exportCSV()"></button>
                 </ng-template> -->
             </p-toolbar>
 
-            <!-- TODO -->
-            <!--
-            responsiveLayout="scroll"
-            [globalFilterFields]="['nombre','email, 'country.name','representative.name','status']"
-            selectionMode="multiple"
-            -->
-            <!--
-            (onLazyLoad)="loadNodes($event)"
-            (onPage)="onPageChange($event)"
-            -->
-            <p-table #dt
+            <p-table #usersTable
                 [lazy]="true"
                 [loading]="loading"
                 dataKey="id"
@@ -45,20 +35,18 @@
             >
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
-                        <!-- <h5 class="m-0">Usuarios</h5> -->
+                        <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(usersTable)"></button> -->
+                        <h5 class="m-0">Usuarios</h5>
                         <!-- <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                            <input pInputText type="text" (input)="onGlobalFilter(usersTable, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
                         </span> -->
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
-                            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
-                        </th>
+                        <th style="width: 3rem"></th>
                         <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
                         <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
                         <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
@@ -70,7 +58,7 @@
 								Activo
 							</div>
 						</th> -->
-                        <!-- <th></th> -->
+                        <th>Acciones</th>
                     </tr>
                     <tr>
                         <th>
@@ -87,47 +75,46 @@
                         </th>
                         <th>
                             <p-columnFilter field="role" matchMode="equals" [showMenu]="false">
-
-                                <!-- let-filter="filterCallback" -->
-                                <!-- (onChange)="filter($event.value)" -->
-                                <ng-template pTemplate="filter" let-value>
-                                    <p-dropdown [ngModel]="value" [options]="roles" placeholder="Rol" [showClear]="true">
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                    <p-dropdown [ngModel]="value" [options]="roles" (onChange)="filter($event.value)" placeholder="Rol" [showClear]="true">
                                         <ng-template let-option pTemplate="item">
                                             <span>{{option.label}}</span>
                                         </ng-template>
                                     </p-dropdown>
                                 </ng-template>
-
                             </p-columnFilter>
                         </th>
                         <th>
                             <p-columnFilter type="boolean" matchMode="equals" field="is_active"></p-columnFilter>
+                        </th>
+                        <th>
+                            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(usersTable)"></button>
                         </th>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="body" let-user>
                     <tr>
-                        <td>
+                        <td style="width:4%; min-width:3rem;">
                             <p-tableCheckbox [value]="user"></p-tableCheckbox>
                         </td>
-                        <td style="width:14%; min-width:10rem;">
+                        <td style="width:6%; min-width:10rem;">
                             <span class="p-column-title">ID</span>
                             {{user.id}}
                         </td>
-                        <td style="width:14%; min-width:10rem;">
+                        <td style="width:25%; min-width:10rem;">
                             <span class="p-column-title">Nombre</span>
                             {{user.nombre}}
                         </td>
-                        <td style="width:14%; min-width:10rem;">
+                        <td style="width:30%; min-width:10rem;">
                             <span class="p-column-title">Email</span>
                             {{user.email}}
                         </td>
-                        <td style="width:14%; min-width:10rem;">
+                        <td style="width:15%; min-width:10rem;">
                             <span class="p-column-title">Rol</span>
                             {{user.role}}
                         </td>
-                        <td style="width:14%; min-width:10rem;">
+                        <td style="width:5%; min-width:10rem;">
                             <span class="p-column-title">Activo</span>
 							<i class="pi" [ngClass]="{'true-icon pi-check-circle text-green-500': user.is_active, 'false-icon pi-times-circle text-pink-500': !user.is_active}"></i>
 						</td>
@@ -136,10 +123,10 @@
                             {{user.createdAt}}
                         </td> -->
 
-                        <td>
+                        <td style="width:15%; min-width:10rem;">
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="openEditUser(user)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteUser(user)"></button>
+                                <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="openEditUser(user)"></button>
+                                <button pButton icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteUser(user)"></button>
                             </div>
                         </td>
                     </tr>
@@ -196,8 +183,8 @@
             </ng-template>
 
             <ng-template pTemplate="footer">
-                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-                <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+                <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton label="Guardar" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
             </ng-template>
         </p-dialog>
 
@@ -207,8 +194,8 @@
                 <span *ngIf="user">¿Estás seguro de que deseas eliminar al usuario <b>{{user.nombre}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteUserDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Sí" (click)="confirmDelete()"></button>
+                <button pButton icon="pi pi-times" class="p-button-text" label="No" (click)="deleteUserDialog = false"></button>
+                <button pButton icon="pi pi-check" class="p-button-text" label="Sí" (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
 
@@ -218,8 +205,8 @@
                 <span>¿Estás seguro de que deseas eliminar los usuarios seleccionados?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteUserssDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Sí" (click)="confirmDeleteSelected()"></button>
+                <button pButton icon="pi pi-times" class="p-button-text" label="No" (click)="deleteUserssDialog = false"></button>
+                <button pButton icon="pi pi-check" class="p-button-text" label="Sí" (click)="confirmDeleteSelected()"></button>
             </ng-template>
         </p-dialog>
 

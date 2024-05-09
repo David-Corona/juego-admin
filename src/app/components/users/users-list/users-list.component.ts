@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LazyLoadEvent, MessageService, PrimeNGConfig } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { UsersService } from '../users.service';
 
@@ -24,6 +24,14 @@ interface User {
     is_active?: boolean;
     createdAt?: Date;
     UpdatedAt?: Date;
+}
+
+interface queryOptions {
+    pageSize: number;
+    page: number;
+    sortOrder?:number;
+    sortField?: string;
+    filters?: string;
 }
 
 
@@ -51,7 +59,6 @@ export class UsersListComponent {
     loading: boolean;
 
     pageSizeOptions: number[] = [5, 10, 25, 50];
-    currentPage: number = 1;
     pageSize: number = 5;
     totalRecords: number = 0;
     first: number = 0;
@@ -61,7 +68,6 @@ export class UsersListComponent {
         private usersService: UsersService,
         private messageService: MessageService,
         // protected router: Router,
-        private primengConfig: PrimeNGConfig
       ) { }
 
 
@@ -77,14 +83,10 @@ export class UsersListComponent {
             { label: 'Usuario', value: 'user' },
         ];
 
-        // TODO - Resolver
-        // this.loadUsers();
-
         this.loading = true
-        this.primengConfig.ripple = true;
     }
 
-    loadUsers(options: any){ // TODO - Type
+    loadUsers(options: queryOptions){
         this.usersService.getUsuarios(options)
         .subscribe({
           next: resp => {
@@ -100,16 +102,12 @@ export class UsersListComponent {
         })
     }
 
-    // clear(table: Table) {
-    //     table.clear();
-    // }
-
-    // TODO - This triggers on pagination, ordering and filtering
+    // Triggers on loading, pagination, ordering and filtering
     onChange(event: LazyLoadEvent): void {
         console.log("Event - ", event);
         this.first = event.first;
 
-        const options = {
+        const options: queryOptions = {
             pageSize: event.rows,
             page: this.first / this.pageSize + 1,
             sortOrder: event.sortOrder,
@@ -118,16 +116,9 @@ export class UsersListComponent {
         }
 
         this.pageSize = event.rows;
-        this.currentPage = this.first / this.pageSize + 1;
 
         this.loadUsers(options);
     }
-
-    // TODO
-    // onGlobalFilter(table: Table, event: Event) {
-    //     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-    // }
-
 
     openNewUser() {
         this.user = {};
@@ -230,5 +221,8 @@ export class UsersListComponent {
         });
     }
 
+    clear(table: Table) {
+        table.clear();
+    }
 
 }

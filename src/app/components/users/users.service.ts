@@ -23,7 +23,6 @@ export class UsersService {
     getUsuarios(options: any): Observable<any> { // TODO - Types
         console.log("Options - ", options);
         const params = buildQueryParams(options)
-        console.log("Params - ", params);
         return this.http.get<any>(`${API_URL_USUARIOS}?${params}`);
     }
 
