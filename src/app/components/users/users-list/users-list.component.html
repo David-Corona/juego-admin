@@ -52,7 +52,6 @@
                         <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
                         <th pSortableColumn="role">Rol <p-sortIcon field="role"></p-sortIcon></th>
                         <th pSortableColumn="is_active">Activo <p-sortIcon field="is_active"></p-sortIcon></th>
-                        <!-- <th pSortableColumn="createdAt">Fecha <p-sortIcon field="createdAt"></p-sortIcon></th> -->
                         <!-- <th style="min-width: 8rem">
 							<div class="flex justify-content-between align-items-center">
 								Activo
@@ -118,11 +117,6 @@
                             <span class="p-column-title">Activo</span>
 							<i class="pi" [ngClass]="{'true-icon pi-check-circle text-green-500': user.is_active, 'false-icon pi-times-circle text-pink-500': !user.is_active}"></i>
 						</td>
-                        <!-- <td style="width:14%; min-width:10rem;">
-                            <span class="p-column-title">Fecha</span>
-                            {{user.createdAt}}
-                        </td> -->
-
                         <td style="width:15%; min-width:10rem;">
                             <div class="flex">
                                 <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="openEditUser(user)"></button>
@@ -170,16 +164,6 @@
                     <p-inputSwitch [(ngModel)]="user.is_active"></p-inputSwitch>
                 </div>
 
-                <!-- <div class="formgrid grid">
-                    <div class="field col">
-                        <label for="price">Price</label>
-                        <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
-                    </div>
-                    <div class="field col">
-                        <label for="quantity">Quantity</label>
-                        <p-inputNumber id="quantity" [(ngModel)]="product.quantity"></p-inputNumber>
-                    </div>
-                </div> -->
             </ng-template>
 
             <ng-template pTemplate="footer">

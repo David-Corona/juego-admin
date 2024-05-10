@@ -1,46 +1,14 @@
 import { Component } from '@angular/core';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { UsersService } from '../users.service';
+import { UsersService } from '../shared/users.service';
+import { User, UserRole, UserResponse } from '../shared/users.model';
+import { QueryOptions, TableColumn } from '../../../shared/models/shared.model';
 
-
-// TODO - Export to an interfaces file
-interface Column {
-    field: string;
-    header: string;
-}
-
-interface userRole {
-    label: string;
-    value: string;
-}
-
-interface User {
-    id?: number;
-    nombre?: string;
-    email?: string;
-    role?: userRole;
-    password?: string;
-    is_active?: boolean;
-    createdAt?: Date;
-    UpdatedAt?: Date;
-}
-
-interface queryOptions {
-    pageSize: number;
-    page: number;
-    sortOrder?:number;
-    sortField?: string;
-    filters?: string;
-}
 
 
 @Component({
-    //   selector: 'app-users-list',
-    //   standalone: true,
-    //   imports: [],
     templateUrl: './users-list.component.html',
-    //   styleUrl: './users-list.component.scss'
     providers: [MessageService]
 })
 export class UsersListComponent {
@@ -48,8 +16,8 @@ export class UsersListComponent {
     users: User[] = [];
     user: User = {};
     selectedUsers: User[] = [];
-    cols: Column[] = [];
-    roles: userRole[] = [];
+    cols: TableColumn[] = [];
+    roles: UserRole[] = [];
 
     submitted: boolean = false;
     userDialog: boolean = false;
@@ -86,7 +54,7 @@ export class UsersListComponent {
         this.loading = true
     }
 
-    loadUsers(options: queryOptions){
+    loadUsers(options: QueryOptions){
         this.usersService.getUsuarios(options)
         .subscribe({
           next: resp => {
@@ -107,7 +75,7 @@ export class UsersListComponent {
         console.log("Event - ", event);
         this.first = event.first;
 
-        const options: queryOptions = {
+        const options: QueryOptions = {
             pageSize: event.rows,
             page: this.first / this.pageSize + 1,
             sortOrder: event.sortOrder,
@@ -149,7 +117,7 @@ export class UsersListComponent {
     createUser() {
         this.usersService.createUsuario(this.user)
         .subscribe({
-          next: (resp: any) => { // TODO UserResponse
+          next: (resp: UserResponse) => {
             console.log(resp);
             this.users.push(resp.data);
             this.users = [...this.users];
@@ -165,7 +133,7 @@ export class UsersListComponent {
     editUser() {
         this.usersService.updateUsuario(this.user)
         .subscribe({
-          next: (resp: any) => { // TODO UserResponse
+          next: (resp: UserResponse) => {
             console.log(resp);
             this.users = this.users.map(u => u.id === this.user.id ? resp.data : u);
             this.messageService.add({ severity: 'success', summary: '¡Éxito!', detail: 'Usuario editado correctamente'});

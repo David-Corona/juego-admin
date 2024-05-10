@@ -1,5 +1,7 @@
+import { QueryOptions } from "../models/shared.model";
 
-export function buildQueryParams(options: any): string { // TODO - Type
+
+export function buildQueryParams(options: QueryOptions): string {
     let params = [];
     for (const key in options) {
         if (options.hasOwnProperty(key) && options[key]) {
