@@ -28,7 +28,7 @@
                 [rowsPerPageOptions]="pageSizeOptions"
                 [rows]="pageSize"
                 [showCurrentPageReport]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                currentPageReportTemplate="{first} - {last} de {totalRecords}"
                 [first]="first"
                 [totalRecords]="totalRecords"
                 (onLazyLoad)="onChange($event)"
