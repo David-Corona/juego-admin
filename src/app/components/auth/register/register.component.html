@@ -1,1 +1,104 @@
-<p>register works!</p>
+
+
+<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-column align-items-center justify-content-center">
+        <p-toast></p-toast>
+
+        <div class="w-full surface-card pb-8 pt-6 px-6 sm:px-8 shadow-1" style="border-radius:53px"> <!-- sm:px-6 -->
+            <div class="text-center mb-5">
+                <!-- <img src="assets/layout/images/{{layoutService.config().colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0"> -->
+                <img src="assets/layout/images/logo-dark.svg" alt="Logo" height="80" class="mb-5">
+                <div class="text-900 text-3xl font-medium mb-3">Registro</div>
+                <!-- <span class="text-600 font-medium">Sign in to continue</span> -->
+                <!-- <span class="text-600 font-medium line-height-3">¿Aun no tiene cuenta?</span> -->
+                <!-- <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">¡Regístrese!</a> -->
+            </div>
+
+            <form [formGroup]="registerForm" (ngSubmit)="registerAccount()">
+
+                <!-- form-group -->
+                <div class="field">
+                    <!-- Label class example: class="block text-900 text-xl font-medium mb-2" -->
+                    <label for="nombre" class="block">Nombre</label>
+                    <!-- Input example: class="w-full md:w-30rem mb-5" style="padding:1rem" -->
+                    <input id="nombre" type="text" pInputText placeholder="Nombre" formControlName="nombre"
+                    [ngClass]="{'ng-invalid ng-dirty': registerForm.get('nombre').invalid && registerForm.get('nombre').touched }"/>
+                    <div *ngIf="registerForm.get('nombre').invalid && registerForm.get('nombre').touched"  >
+                        <small *ngIf="registerForm.get('nombre').errors?.required" class="p-error block">
+                            El nombre es obligatorio.
+                        </small>
+                        <small *ngIf="registerForm.get('nombre').errors?.minlength" class="p-error block">
+                            El nombre debe contener al menos 6 caracteres.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="email" class="block">Email</label>
+                    <input id="email" type="text" pInputText placeholder="Email" formControlName="email"
+                    [ngClass]="{'ng-invalid ng-dirty': registerForm.get('email').invalid && registerForm.get('email').touched }"/>
+                    <div *ngIf="registerForm.get('email').invalid && registerForm.get('email').touched"  >
+                        <small *ngIf="registerForm.get('email').errors?.required" class="p-error block">
+                            El email es obligatorio.
+                        </small>
+                        <small *ngIf="registerForm.get('email').errors?.email" class="p-error block">
+                            El formato del email es inválido.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="password" class="block">Contraseña</label>
+                    <!-- P-Password example: styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem" -->
+                    <p-password id="password" placeholder="Contraseña" formControlName="password" [feedback]="false" [toggleMask]="true"
+                    [ngClass]="{'ng-invalid ng-dirty': registerForm.get('password').invalid && registerForm.get('password').touched }"></p-password>
+                    <!-- promptLabel="Elige una contraseña" weakLabel="Débil" mediumLabel="Media" strongLabel="Fuerte">
+                        <ng-template pTemplate="header">
+                            <h6>Pick a password</h6>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <p-divider />
+                            <p class="mt-2">Suggestions</p>
+                            <ul class="pl-2 ml-2 mt-2" style="line-height: 1.5">
+                                <li>Al menos una minúscula</li>
+                                <li>Al menos una mayúscula</li>
+                                <li>Al menos un número</li>
+                                <li>Mínimo 8 caracteres</li>
+                            </ul>
+                        </ng-template>
+                    </p-password> -->
+                    <div *ngIf="registerForm.get('password').invalid && registerForm.get('password').touched"  >
+                        <small *ngIf="registerForm.get('password').errors?.required" class="p-error block">
+                            La contraseña es obligatoria.
+                        </small>
+                        <!-- <small *ngIf="registerForm.get('password').errors?.minlength" class="p-error block">
+                            Contraseña debe contener al menos 8 caracteres.
+                        </small> -->
+                        <small *ngIf="registerForm.get('password').errors?.pattern" class="p-error block">
+                            La contraseña debe contener al menos 8 caracteres, incluyendo al menos una minúscula, una mayúscula y un número.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="confirmPassword" class="block">Repite la contraseña</label>
+                    <p-password id="confirmPassword" placeholder="Confirme Contraseña" formControlName="confirmPassword" [feedback]="false" [toggleMask]="true"
+                    [ngClass]="{'ng-invalid ng-dirty': registerForm.get('confirmPassword').invalid && registerForm.get('confirmPassword').touched }"></p-password>
+                    <small *ngIf="registerForm.get('confirmPassword').invalid && registerForm.get('confirmPassword').touched" class="p-error block">
+                        Las contraseñas no coinciden.
+                    </small>
+                </div>
+
+                <!-- class="w-full p-3 text-xl" -->
+                <button pButton pRipple type="submit" label="Submit" ></button>
+                <!-- [disabled]="!registerForm.valid" -->
+            </form>
+
+            <!-- <div>
+                <div class="flex align-items-center justify-content-between mb-5 gap-5">
+                </div>
+            </div> -->
+
+        </div>
+    </div>
+</div>

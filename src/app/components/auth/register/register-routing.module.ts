@@ -8,4 +8,4 @@ import { RegisterComponent } from './register.component';
     ])],
     exports: [RouterModule]
 })
-export class RegoisterRoutingModule { }
+export class RegisterRoutingModule { }
