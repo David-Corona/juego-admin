@@ -22,6 +22,7 @@
                     <label for="nombre" class="block">Nombre</label>
                     <!-- Input example: class="w-full md:w-30rem mb-5" style="padding:1rem" -->
                     <input id="nombre" type="text" pInputText placeholder="Nombre" formControlName="nombre"
+                    class="w-full md:w-30rem mb-2" style="padding:1rem"
                     [ngClass]="{'ng-invalid ng-dirty': registerForm.get('nombre').invalid && registerForm.get('nombre').touched }"/>
                     <div *ngIf="registerForm.get('nombre').invalid && registerForm.get('nombre').touched"  >
                         <small *ngIf="registerForm.get('nombre').errors?.required" class="p-error block">
@@ -36,12 +37,13 @@
                 <div class="field">
                     <label for="email" class="block">Email</label>
                     <input id="email" type="text" pInputText placeholder="Email" formControlName="email"
+                    class="w-full md:w-30rem mb-2" style="padding:1rem"
                     [ngClass]="{'ng-invalid ng-dirty': registerForm.get('email').invalid && registerForm.get('email').touched }"/>
                     <div *ngIf="registerForm.get('email').invalid && registerForm.get('email').touched"  >
                         <small *ngIf="registerForm.get('email').errors?.required" class="p-error block">
                             El email es obligatorio.
                         </small>
-                        <small *ngIf="registerForm.get('email').errors?.email" class="p-error block">
+                        <small *ngIf="registerForm.get('email').errors?.pattern" class="p-error block">
                             El formato del email es inválido.
                         </small>
                     </div>
@@ -49,9 +51,11 @@
 
                 <div class="field">
                     <label for="password" class="block">Contraseña</label>
-                    <!-- P-Password example: styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem" -->
                     <p-password id="password" placeholder="Contraseña" formControlName="password" [feedback]="false" [toggleMask]="true"
-                    [ngClass]="{'ng-invalid ng-dirty': registerForm.get('password').invalid && registerForm.get('password').touched }"></p-password>
+                    inputStyleClass="w-full md:w-30rem mb-2" [inputStyle]="{'padding':'1rem'}"
+                    [ngClass]="{'ng-invalid ng-dirty': registerForm.get('password').invalid && registerForm.get('password').touched }">
+                </p-password>
+
                     <!-- promptLabel="Elige una contraseña" weakLabel="Débil" mediumLabel="Media" strongLabel="Fuerte">
                         <ng-template pTemplate="header">
                             <h6>Pick a password</h6>
@@ -83,15 +87,32 @@
                 <div class="field">
                     <label for="confirmPassword" class="block">Repite la contraseña</label>
                     <p-password id="confirmPassword" placeholder="Confirme Contraseña" formControlName="confirmPassword" [feedback]="false" [toggleMask]="true"
+                    inputStyleClass="w-full md:w-30rem mb-2" [inputStyle]="{'padding':'1rem'}"
                     [ngClass]="{'ng-invalid ng-dirty': registerForm.get('confirmPassword').invalid && registerForm.get('confirmPassword').touched }"></p-password>
                     <small *ngIf="registerForm.get('confirmPassword').invalid && registerForm.get('confirmPassword').touched" class="p-error block">
                         Las contraseñas no coinciden.
                     </small>
                 </div>
 
+                <div class="field">
+                    <div class="flex align-items-center">
+                        <div>
+                            <p-checkbox formControlName="acceptTerms" binary="true" name="acceptTerms" id="acceptTerms"
+                            [ngClass]="{'ng-invalid ng-dirty': registerForm.get('acceptTerms').invalid && registerForm.get('acceptTerms').touched }" />
+                        </div>
+                        <div>
+                            <label class="ml-2" for="acceptTerms">Acepto los Términos y Condiciones</label>
+                        </div>
+                    </div>
+                    <small *ngIf="registerForm.get('acceptTerms').invalid && registerForm.get('acceptTerms').touched" class="p-error block">
+                        Debe aceptar los Términos y Condiciones para registrarse.
+                    </small>
+                </div>
+
                 <!-- class="w-full p-3 text-xl" -->
-                <button pButton pRipple type="submit" label="Submit" ></button>
-                <!-- [disabled]="!registerForm.valid" -->
+                <button class="w-full p-3 text-xl" pButton pRipple type="submit" label="Enviar" [disabled]="!registerForm.valid"></button>
+
+                <!-- (click)="onReset() -->
             </form>
 
             <!-- <div>

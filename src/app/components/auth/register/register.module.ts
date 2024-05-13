@@ -6,7 +6,9 @@ import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
 import { RegisterComponent } from './register.component';
+
 
 
 
@@ -21,8 +23,7 @@ import { RegisterComponent } from './register.component';
     // CardModule,
     PasswordModule,
     ToastModule,
-    // FormsModule,
-
+    CheckboxModule,
 
   ]
 })
